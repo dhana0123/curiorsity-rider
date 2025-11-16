@@ -1,5 +1,5 @@
-import connectDB from "../lib/mongodb";
-import TopicModel, { Topic } from "../modals/topics";
+import connectDB from "../../lib/mongodb";
+import TopicModel, { Topic } from "../../modals/topics";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
