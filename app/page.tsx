@@ -4,19 +4,33 @@ import dynamic from "next/dynamic";
 import axios from "axios";
 import { buildTree, TreeNode } from "./utils/buildTree";
 
-const Tree = dynamic(() => import("react-d3-tree"), { ssr: false });
+const Tree = dynamic(() => import("react-d3-tree"), { 
+  ssr: false,
+  loading: () => <div>Loading tree...</div>
+});
 
 export default function Home() {
   const [treeData, setTreeData] = useState<TreeNode[]>([]);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isClient) return;
+    
     async function fetchData() {
-      const { data } = await axios.get("/api/topics");
-      const tree = buildTree(data);
-      setTreeData(tree);
+      try {
+        const { data } = await axios.get("/api/topics");
+        const tree = buildTree(data);
+        setTreeData(tree);
+      } catch (error) {
+        console.error("Error fetching topics:", error);
+      }
     }
     fetchData();
-  }, []);
+  }, [isClient]);
 
   const renderNode = ({ nodeDatum }: { nodeDatum: TreeNode }) => (
     <g>
@@ -34,9 +48,13 @@ export default function Home() {
     </g>
   );
 
+  if (!isClient) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div style={{ width: "100%", height: "100vh" }}>
-      {treeData.length > 0 && (
+      {treeData.length > 0 ? (
         <Tree
           data={treeData[0]}
           collapsible={true}
@@ -44,6 +62,10 @@ export default function Home() {
           renderCustomNodeElement={renderNode}
           translate={{ x: 300, y: 50 }}
         />
+      ) : (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <div>No data available</div>
+        </div>
       )}
     </div>
   );
