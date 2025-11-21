@@ -1,41 +1,60 @@
-const express = require('express');
-const path = require('path');
-const cors = require('cors');
+import express from "express";
+import path from "path";
+import cors from "cors";
+import mongoose from "mongoose";
+import {fileURLToPath} from "url";
+import {dirname} from "path";
+import {automobile_courses} from "./courses.js";
+import userProgressRoutes from "./routes/userProgressRoutes.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-// Import courses data
-const { automobile_courses } = require('./courses');
+// MongoDB Connection
+const MONGODB_URI =
+  process.env.MONGODB_URI || "mongodb://localhost:27017/curiosity-rider";
+mongoose
+  .connect(MONGODB_URI)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 // API Routes
-app.get('/api/courses', (req, res) => {
+app.use("/api/progress", userProgressRoutes);
+
+// Courses routes
+app.get("/api/courses", (req, res) => {
   res.json(automobile_courses);
 });
 
-app.get('/api/courses/:courseId', (req, res) => {
+app.get("/api/courses/:courseId", (req, res) => {
   const courseId = req.params.courseId;
   const course = automobile_courses[courseId];
-  
+
   if (!course) {
-    return res.status(404).json({ error: 'Course not found' });
+    return res.status(404).json({error: "Course not found"});
   }
-  
+
   res.json(course);
 });
 
-// Serve static React frontend
-app.use(express.static(path.join(__dirname, 'frontend/dist')));
+// Serve static files from the React frontend app in production
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/build")));
 
-// Catch all handler - send back index.html
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
-});
+  // Handle React routing, return all requests to React app
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
+  });
+}
 
+// Start server
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

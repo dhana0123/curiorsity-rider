@@ -1,0 +1,11 @@
+{
+  "watch": ["server.js", "models/", "controllers/", "routes/"],
+  "ext": "js,json",
+  "ignore": ["node_modules/**/*.js", "**/*.test.js"],
+  "execMap": {
+    "js": "node --experimental-modules --es-module-specifier-resolution=node"
+  },
+  "env": {
+    "NODE_ENV": "development"
+  }
+}
