@@ -1,6 +1,5 @@
 import {useEffect, useState, useMemo} from "react";
 import {Button} from "@/components/ui/button";
-import {PolymathMap} from "./components/PolymathMap";
 
 type UserStats = {
   name: string;
@@ -76,6 +75,7 @@ type TimelineItem = {
   subtitle?: string;
   period: string;
   description: string;
+  link?: string;
 };
 
 function TimelineSection({
@@ -94,7 +94,7 @@ function TimelineSection({
         {items.map((item) => (
           <div key={item.title} className="relative space-y-1 pt-1">
             <span className="absolute -left-[8px] top-2 block size-3 rounded-full bg-primary shadow-[0_0_12px_rgba(255,0,255,0.8)]" />
-            <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            <div className="text-xs ml-5 font-medium uppercase tracking-wide text-muted-foreground">
               {item.period}
             </div>
             <div className="text-sm font-semibold text-foreground">
@@ -123,9 +123,8 @@ function PapersTable({items}: {items: TimelineItem[]}) {
       </h2>
       <div className="overflow-hidden rounded-xl border border-border/70 bg-card/70 backdrop-blur">
         <div className="grid grid-cols-[2fr,1fr,2fr] gap-3 border-b border-border/60 bg-background/60 px-4 py-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-          <span>Title</span>
-          <span>Year / Status</span>
-          <span>Summary</span>
+          <span>Research on Embodied ai data standardization</span>
+          <span>2025 / published</span>
         </div>
         <div className="divide-y divide-border/60 text-xs">
           {items.map((item) => (
@@ -133,10 +132,22 @@ function PapersTable({items}: {items: TimelineItem[]}) {
               key={item.title}
               className="grid grid-cols-[2fr,1fr,2fr] gap-3 px-4 py-3 hover:bg-background/60"
             >
-              <div className="font-semibold text-foreground">{item.title}</div>
-              <div className="text-[0.7rem] font-medium uppercase tracking-wide text-muted-foreground">
-                {item.period}
+              <div
+                className="font-semibold text-foreground"
+                onClick={() => window.open(item.link, "_blank")}
+              >
+                {item.title}
               </div>
+              <Button
+                variant="outline"
+                className="mr-auto hover:underline"
+                onClick={() => window.open(item.link, "_blank")}
+              >
+                view
+              </Button>
+              {/* <div className="text-[0.7rem] font-medium uppercase tracking-wide text-muted-foreground">
+                {item.period}
+              </div> */}
               <div className="text-[0.75rem] text-muted-foreground">
                 {item.description}
               </div>
@@ -149,53 +160,53 @@ function PapersTable({items}: {items: TimelineItem[]}) {
 }
 
 // Import the automobile courses directly for now
-const automobile_courses = {
-  "intro-to-cars": {
-    id: "intro-to-cars",
-    title: "Introduction to Automobiles",
-    description: "Learn the basics of how cars work",
-    modules: [
-      {
-        id: "module-1",
-        title: "Car Basics",
-        lessons: [
-          {id: "lesson-1", title: "How Engines Work", duration: "10 min"},
-          {id: "lesson-2", title: "Transmission Systems", duration: "12 min"},
-        ],
-      },
-      {
-        id: "module-2",
-        title: "Car Maintenance",
-        lessons: [
-          {id: "lesson-3", title: "Oil Change Basics", duration: "8 min"},
-          {id: "lesson-4", title: "Tire Care", duration: "10 min"},
-        ],
-      },
-    ],
-  },
-  "car-electronics": {
-    id: "car-electronics",
-    title: "Car Electronics",
-    description: "Understanding modern car electronics",
-    modules: [
-      {
-        id: "module-1",
-        title: "Electrical Systems",
-        lessons: [
-          {id: "lesson-1", title: "Battery Fundamentals", duration: "15 min"},
-          {id: "lesson-2", title: "Wiring Basics", duration: "12 min"},
-        ],
-      },
-    ],
-  },
-};
+// const automobile_courses = {
+//   "intro-to-cars": {
+//     id: "intro-to-cars",
+//     title: "Introduction to Automobiles",
+//     description: "Learn the basics of how cars work",
+//     modules: [
+//       {
+//         id: "module-1",
+//         title: "Car Basics",
+//         lessons: [
+//           {id: "lesson-1", title: "How Engines Work", duration: "10 min"},
+//           {id: "lesson-2", title: "Transmission Systems", duration: "12 min"},
+//         ],
+//       },
+//       {
+//         id: "module-2",
+//         title: "Car Maintenance",
+//         lessons: [
+//           {id: "lesson-3", title: "Oil Change Basics", duration: "8 min"},
+//           {id: "lesson-4", title: "Tire Care", duration: "10 min"},
+//         ],
+//       },
+//     ],
+//   },
+//   "car-electronics": {
+//     id: "car-electronics",
+//     title: "Car Electronics",
+//     description: "Understanding modern car electronics",
+//     modules: [
+//       {
+//         id: "module-1",
+//         title: "Electrical Systems",
+//         lessons: [
+//           {id: "lesson-1", title: "Battery Fundamentals", duration: "15 min"},
+//           {id: "lesson-2", title: "Wiring Basics", duration: "12 min"},
+//         ],
+//       },
+//     ],
+//   },
+// };
 
 function App() {
   const career: TimelineItem[] = [
     {
-      title: "Physical AI Researcher",
-      subtitle: "Independent / Curiosity Rider",
-      period: "2024 - Present",
+      title: "Bellu.ai",
+      // subtitle: "Independent / Bellu.ai",
+      period: "2025 - Present",
       description:
         "Exploring embodied intelligence, robotics, and real-world learning systems that blend physical environments with AI agents.",
     },
@@ -203,19 +214,21 @@ function App() {
 
   const projects: TimelineItem[] = [
     {
-      title: "Curiosity Rider",
-      period: "2024",
-      description:
-        "Gamified learning environment that treats knowledge as an open-world map, with streaks, XP, and quests for continuous curiosity.",
+      title: "Research on Embodied ai data standardization",
+      period: "2025",
+      description: `Embodied AI (EAI) is key to achieving AGI, enabling agents to learn through real-world physical interaction.
+        This study highlights the need for standardized multimodal data, robust database design, and ethical frameworks to bridge the Sim2Real gap safely.`,
     },
   ];
 
   const papers: TimelineItem[] = [
     {
-      title: "Physical AI for Experiential Learning (working title)",
-      period: "In progress",
-      description:
-        "Drafting research around how physical environments and agentic AI can co-design learning trajectories and assessments.",
+      title:
+        "Multimodal Data Standardization and Management for Generalizable Embodied AI",
+      period: "2025 / published",
+      description: `Embodied AI (EAI) is key to achieving AGI, enabling agents to learn through real-world physical interaction.
+        This study highlights the need for standardized multimodal data, robust database design, and ethical frameworks to bridge the Sim2Real gap safely.`,
+      link: "https://www.techrxiv.org/users/998761/articles/1360379-the-architecture-of-embodiment-multimodal-data-standardization-and-management-for-generalizable-embodied-ai",
     },
   ];
 
@@ -256,7 +269,7 @@ function App() {
               </p>
               <div className="flex justify-center space-x-4">
                 <a
-                  href="https://github.com/yourusername"
+                  href="https://github.com/dhana0123"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-foreground transition-colors"
@@ -275,7 +288,7 @@ function App() {
                   </svg>
                 </a>
                 <a
-                  href="https://twitter.com/yourusername"
+                  href="https://x.com/santhoshdhana7"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-foreground transition-colors"
@@ -290,7 +303,7 @@ function App() {
                   </svg>
                 </a>
                 <a
-                  href="https://linkedin.com/in/yourusername"
+                  href="https://www.linkedin.com/in/santosh-bellu"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-foreground transition-colors"
@@ -311,8 +324,8 @@ function App() {
                 experiments.
               </p>
               <div className="mt-4 flex flex-wrap items-center justify-center gap-4">
-                <Button>View Projects</Button>
-                <Button variant="outline">Download CV</Button>
+                <Button>Download CV</Button>
+                {/* <Button variant="outline">Download CV</Button> */}
               </div>
             </div>
           </section>
@@ -329,82 +342,17 @@ function App() {
               </p>
             </div>
             <div className="md:col-span-2 space-y-8">
-              <TimelineSection title="Career" items={career} />
-              <TimelineSection title="Projects" items={projects} />
-              <TimelineSection title="Research Papers" items={papers} />
+              <TimelineSection
+                title="Physical AI Researcher & Founder of bellu.ai"
+                items={career}
+              />
+              <TimelineSection title="Research" items={projects} />
+              <TimelineSection title="Research Engineer" items={papers} />
               <PapersTable items={papers} />
             </div>
           </section>
 
           {/* Polymath Map with React Flow */}
-          <section className="mt-4 space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-              <div>
-                <h2 className="text-base font-semibold tracking-tight text-foreground">
-                  Polymath Map
-                </h2>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  Interactive map of your 999-course journey. Central hub
-                  connects to major domains, with Automotive as the first
-                  unlocked branch. Drag to pan, scroll to zoom.
-                </p>
-              </div>
-              <div className="flex flex-wrap items-center gap-2 text-[0.7rem] text-muted-foreground">
-                <span className="rounded-full bg-primary/10 px-3 py-1 font-medium text-primary">
-                  Target: 999 courses
-                </span>
-                <span className="rounded-full bg-accent/10 px-3 py-1 font-medium text-accent">
-                  Current: Automotive cluster
-                </span>
-              </div>
-            </div>
-
-            {/* React Flow Map */}
-            <div className="rounded-xl border border-border/50 bg-background/50 p-1">
-              <PolymathMap
-                courses={{
-                  engineering: {
-                    title: "Engineering & Mechanics",
-                    description:
-                      "Mechanical and automotive engineering principles",
-                    courses: {
-                      automotive: {
-                        title: "Automotive Systems",
-                        description:
-                          "Fundamentals of automobile engineering and design",
-                        courses: automobile_courses,
-                      },
-                      mechanical: {
-                        title: "Mechanical Engineering",
-                        description: "Core mechanical engineering concepts",
-                        locked: true,
-                      },
-                    },
-                  },
-                  ai: {
-                    title: "AI & Machine Learning",
-                    description: "Artificial intelligence and data science",
-                    locked: true,
-                  },
-                  design: {
-                    title: "Design & Visualization",
-                    description: "Creative design and 3D visualization",
-                    locked: true,
-                  },
-                  business: {
-                    title: "Business & Entrepreneurship",
-                    description: "Startup and business management",
-                    locked: true,
-                  },
-                  science: {
-                    title: "Science & Research",
-                    description: "Scientific research methodologies",
-                    locked: true,
-                  },
-                }}
-              />
-            </div>
-          </section>
         </main>
       </div>
     </div>
@@ -412,3 +360,70 @@ function App() {
 }
 
 export default App;
+
+// <section className="mt-4 space-y-4">
+//   <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+//     <div>
+//       <h2 className="text-base font-semibold tracking-tight text-foreground">
+//         Polymath Map
+//       </h2>
+//       <p className="mt-1 text-xs text-muted-foreground">
+//         Interactive map of your 999-course journey. Central hub connects to
+//         major domains, with Automotive as the first unlocked branch. Drag to
+//         pan, scroll to zoom.
+//       </p>
+//     </div>
+//     <div className="flex flex-wrap items-center gap-2 text-[0.7rem] text-muted-foreground">
+//       <span className="rounded-full bg-primary/10 px-3 py-1 font-medium text-primary">
+//         Target: 999 courses
+//       </span>
+//       <span className="rounded-full bg-accent/10 px-3 py-1 font-medium text-accent">
+//         Current: Automotive cluster
+//       </span>
+//     </div>
+//   </div>
+
+//   {/* React Flow Map */}
+//   <div className="rounded-xl border border-border/50 bg-background/50 p-1">
+//     <PolymathMap
+//       courses={{
+//         engineering: {
+//           title: "Engineering & Mechanics",
+//           description: "Mechanical and automotive engineering principles",
+//           courses: {
+//             automotive: {
+//               title: "Automotive Systems",
+//               description: "Fundamentals of automobile engineering and design",
+//               courses: automobile_courses,
+//             },
+//             mechanical: {
+//               title: "Mechanical Engineering",
+//               description: "Core mechanical engineering concepts",
+//               locked: true,
+//             },
+//           },
+//         },
+//         ai: {
+//           title: "AI & Machine Learning",
+//           description: "Artificial intelligence and data science",
+//           locked: true,
+//         },
+//         design: {
+//           title: "Design & Visualization",
+//           description: "Creative design and 3D visualization",
+//           locked: true,
+//         },
+//         business: {
+//           title: "Business & Entrepreneurship",
+//           description: "Startup and business management",
+//           locked: true,
+//         },
+//         science: {
+//           title: "Science & Research",
+//           description: "Scientific research methodologies",
+//           locked: true,
+//         },
+//       }}
+//     />
+//   </div>
+// </section>;
