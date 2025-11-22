@@ -6,6 +6,8 @@ import {fileURLToPath} from "url";
 import {dirname} from "path";
 import {automobile_courses} from "./courses.js";
 import userProgressRoutes from "./routes/userProgressRoutes.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -18,8 +20,7 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB Connection
-const MONGODB_URI =
-  process.env.MONGODB_URI || "mongodb://localhost:27017/curiosity-rider";
+const MONGODB_URI = process.env.MONGODB_URI;
 mongoose
   .connect(MONGODB_URI)
   .then(() => console.log("Connected to MongoDB"))
