@@ -1,15 +1,21 @@
-import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
+import * as React from "react";
+import {Slot} from "@radix-ui/react-slot";
+import {cva, type VariantProps} from "class-variance-authority";
 
-import { cn } from "@/lib/utils"
+import {cn} from "@/lib/utils";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default:
+          // Base: 3D ledge shadow
+          "relative overflow-hidden bg-primary text-primary-foreground hover:bg-primary/90 shadow-primary/60 shadow-[0_6px_0_0_var(--tw-shadow-color)] " +
+          // Hover: keep ledge and add soft glow without changing depth
+          "hover:shadow-[0_6px_0_0_var(--tw-shadow-color),0_0_18px_rgba(255,255,255,0.4)] " +
+          // Active: pressed effect (slightly reduced ledge)
+          "active:translate-y-1 active:shadow-[0_3px_0_0_var(--tw-shadow-color)]",
         destructive:
           "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
@@ -34,7 +40,7 @@ const buttonVariants = cva(
       size: "default",
     },
   }
-)
+);
 
 function Button({
   className,
@@ -44,17 +50,25 @@ function Button({
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
+    asChild?: boolean;
   }) {
-  const Comp = asChild ? Slot : "button"
+  const Comp = asChild ? Slot : "button";
 
   return (
     <Comp
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(
+        "group relative",
+        buttonVariants({variant, size, className})
+      )}
       {...props}
-    />
-  )
+    >
+      <span className="relative z-10 flex items-center gap-2">
+        {props.children}
+      </span>
+      <span className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/2 translate-x-[-120%] bg-gradient-to-r from-white/5 via-white/60 to-white/5 opacity-0 transition-transform transition-opacity duration-500 ease-out group-hover:translate-x-[180%] group-hover:opacity-100" />
+    </Comp>
+  );
 }
 
-export { Button, buttonVariants }
+export {Button, buttonVariants};
