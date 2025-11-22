@@ -1,5 +1,6 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useMemo} from "react";
 import {Button} from "@/components/ui/button";
+import {PolymathMap} from "./components/PolymathMap";
 
 type UserStats = {
   name: string;
@@ -147,6 +148,48 @@ function PapersTable({items}: {items: TimelineItem[]}) {
   );
 }
 
+// Import the automobile courses directly for now
+const automobile_courses = {
+  "intro-to-cars": {
+    id: "intro-to-cars",
+    title: "Introduction to Automobiles",
+    description: "Learn the basics of how cars work",
+    modules: [
+      {
+        id: "module-1",
+        title: "Car Basics",
+        lessons: [
+          {id: "lesson-1", title: "How Engines Work", duration: "10 min"},
+          {id: "lesson-2", title: "Transmission Systems", duration: "12 min"},
+        ],
+      },
+      {
+        id: "module-2",
+        title: "Car Maintenance",
+        lessons: [
+          {id: "lesson-3", title: "Oil Change Basics", duration: "8 min"},
+          {id: "lesson-4", title: "Tire Care", duration: "10 min"},
+        ],
+      },
+    ],
+  },
+  "car-electronics": {
+    id: "car-electronics",
+    title: "Car Electronics",
+    description: "Understanding modern car electronics",
+    modules: [
+      {
+        id: "module-1",
+        title: "Electrical Systems",
+        lessons: [
+          {id: "lesson-1", title: "Battery Fundamentals", duration: "15 min"},
+          {id: "lesson-2", title: "Wiring Basics", duration: "12 min"},
+        ],
+      },
+    ],
+  },
+};
+
 function App() {
   const career: TimelineItem[] = [
     {
@@ -207,9 +250,61 @@ function App() {
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight text-foreground">
                 Santhosh Naik
               </h1>
-              <p className="text-sm font-medium uppercase tracking-[0.25em] text-muted-foreground">
-                Physical AI Researcher
+              <p className="text-lg text-muted-foreground mb-4">
+                Building the future of learning through AI and interactive
+                experiences
               </p>
+              <div className="flex justify-center space-x-4">
+                <a
+                  href="https://github.com/yourusername"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="GitHub"
+                >
+                  <svg
+                    className="h-6 w-6"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.699 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </a>
+                <a
+                  href="https://twitter.com/yourusername"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="Twitter"
+                >
+                  <svg
+                    className="h-6 w-6"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                  </svg>
+                </a>
+                <a
+                  href="https://linkedin.com/in/yourusername"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="LinkedIn"
+                >
+                  <svg
+                    className="h-6 w-6"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                  </svg>
+                </a>
+              </div>
               <p className="mx-auto max-w-xl text-sm text-muted-foreground">
                 Building gamified, embodied learning systems where AI agents and
                 humans co-explore knowledge through streaks, XP, and real-world
@@ -241,17 +336,17 @@ function App() {
             </div>
           </section>
 
-          {/* Polymath Map (node / edge style) */}
-          <section className="mt-4 space-y-4 rounded-2xl border border-border/80 bg-background/60 p-5 shadow-[0_8px_0_0_var(--tw-shadow-color)] shadow-primary/30">
-            <div className="flex flex-wrap items-center justify-between gap-2">
+          {/* Polymath Map with React Flow */}
+          <section className="mt-4 space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
               <div>
                 <h2 className="text-base font-semibold tracking-tight text-foreground">
                   Polymath Map
                 </h2>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  Node-style view of your 999-course journey. Central hub
+                  Interactive map of your 999-course journey. Central hub
                   connects to major domains, with Automotive as the first
-                  unlocked branch.
+                  unlocked branch. Drag to pan, scroll to zoom.
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-2 text-[0.7rem] text-muted-foreground">
@@ -264,79 +359,50 @@ function App() {
               </div>
             </div>
 
-            {/* Simple React-Flow-like layout */}
-            <div className="relative mt-4 overflow-x-auto pb-4">
-              <div className="min-w-[640px]">
-                {/* Central root node */}
-                <div className="flex flex-col items-center">
-                  <div className="rounded-full border border-primary/70 bg-primary/10 px-6 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-primary shadow-[0_4px_0_0_var(--tw-shadow-color)] shadow-primary/40">
-                    Santhosh · Polymath Map
-                  </div>
-
-                  {/* Vertical connector */}
-                  <div className="h-6 w-px bg-border" />
-
-                  {/* First level domains */}
-                  <div className="flex flex-wrap items-start justify-center gap-6">
-                    {/* Engineering & Mechanics node */}
-                    <div className="flex flex-col items-center gap-2">
-                      <div className="rounded-xl border border-border/70 bg-card/80 px-4 py-2 text-xs text-foreground shadow-sm">
-                        <div className="font-semibold">
-                          Engineering & Mechanics
-                        </div>
-                        <div className="mt-1 text-[0.7rem] text-muted-foreground">
-                          Physical systems · Automobiles · Robotics
-                        </div>
-                      </div>
-                      {/* Connector to child cluster */}
-                      <div className="h-5 w-px bg-border" />
-                      <div className="flex items-center gap-3">
-                        <div className="h-px w-4 bg-border" />
-                        <div className="rounded-lg border border-border/70 bg-background/80 px-3 py-2 text-[0.75rem] text-foreground shadow-xs">
-                          <div className="font-semibold text-primary">
-                            Automotive Systems
-                          </div>
-                          <div className="mt-1 text-[0.7rem] text-muted-foreground">
-                            Intro to Automobiles · Car Electronics
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Physical AI node */}
-                    <div className="flex flex-col items-center gap-2">
-                      <div className="rounded-xl border border-border/50 bg-card/60 px-4 py-2 text-xs text-foreground/90">
-                        <div className="font-semibold">
-                          Physical AI & Embodied Intelligence
-                        </div>
-                        <div className="mt-1 text-[0.7rem] text-muted-foreground">
-                          Agents in real environments
-                        </div>
-                      </div>
-                      <div className="h-5 w-px bg-border/70" />
-                      <div className="rounded-full border border-border/60 bg-background/60 px-3 py-1 text-[0.7rem] text-primary">
-                        Planned domain
-                      </div>
-                    </div>
-
-                    {/* Art & Design node */}
-                    <div className="flex flex-col items-center gap-2">
-                      <div className="rounded-xl border border-border/50 bg-card/60 px-4 py-2 text-xs text-foreground/90">
-                        <div className="font-semibold">
-                          Art, Design & Visualization
-                        </div>
-                        <div className="mt-1 text-[0.7rem] text-muted-foreground">
-                          Drawing · UI · Visual thinking
-                        </div>
-                      </div>
-                      <div className="h-5 w-px bg-border/70" />
-                      <div className="rounded-full border border-border/60 bg-background/60 px-3 py-1 text-[0.7rem] text-primary">
-                        Planned domain
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            {/* React Flow Map */}
+            <div className="rounded-xl border border-border/50 bg-background/50 p-1">
+              <PolymathMap
+                courses={{
+                  engineering: {
+                    title: "Engineering & Mechanics",
+                    description:
+                      "Mechanical and automotive engineering principles",
+                    courses: {
+                      automotive: {
+                        title: "Automotive Systems",
+                        description:
+                          "Fundamentals of automobile engineering and design",
+                        courses: automobile_courses,
+                      },
+                      mechanical: {
+                        title: "Mechanical Engineering",
+                        description: "Core mechanical engineering concepts",
+                        locked: true,
+                      },
+                    },
+                  },
+                  ai: {
+                    title: "AI & Machine Learning",
+                    description: "Artificial intelligence and data science",
+                    locked: true,
+                  },
+                  design: {
+                    title: "Design & Visualization",
+                    description: "Creative design and 3D visualization",
+                    locked: true,
+                  },
+                  business: {
+                    title: "Business & Entrepreneurship",
+                    description: "Startup and business management",
+                    locked: true,
+                  },
+                  science: {
+                    title: "Science & Research",
+                    description: "Scientific research methodologies",
+                    locked: true,
+                  },
+                }}
+              />
             </div>
           </section>
         </main>
