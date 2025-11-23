@@ -17,7 +17,7 @@ export const useCourses = () => {
     queryKey: keys().get,
     queryFn: () => api.get(coursesUrls.courses),
   });
-  return {data, isLoading, error};
+  return {data: data?.data, isLoading, error};
 };
 
 export const useUpdateCourses = () => {

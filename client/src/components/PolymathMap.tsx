@@ -8,19 +8,13 @@ import ReactFlow, {
   useEdgesState,
   Panel,
   MarkerType,
+  Position,
 } from "reactflow";
 import type {
   Node,
   Edge,
   ReactFlowInstance,
-  EdgeTypes,
-  NodeTypes,
   Connection as RFConnection,
-  EdgeAddChange,
-  NodeAddChange,
-  NodeRemoveChange,
-  EdgeRemoveChange,
-  NodeResetChange,
 } from "reactflow";
 import "reactflow/dist/style.css";
 
@@ -39,7 +33,7 @@ type PolymathMapProps = {
   onNodeClick?: (node: Node) => void;
 };
 
-export function PolymathMap({courses, onNodeClick}: PolymathMapProps) {
+export function PolymathMap() {
   const {data, isLoading, error} = useCourses();
 
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
@@ -51,18 +45,17 @@ export function PolymathMap({courses, onNodeClick}: PolymathMapProps) {
   const processCourses = useCallback((coursesData: Record<string, any>) => {
     const newNodes: Array<Node<CourseNodeData>> = [];
     const newEdges: Array<Edge> = [];
-    let x = 0;
-    let y = 0;
 
     // Add central node
     const centerNode: Node = {
       id: "center",
-      type: "default",
       data: {
         label: "Santhosh · Polymath",
         type: "center",
         description: "Your learning journey hub",
       },
+      sourcePosition: Position.Right,
+      targetPosition: Position.Left,
       position: {x: 0, y: 0},
       style: {
         background: "white",
@@ -74,120 +67,69 @@ export function PolymathMap({courses, onNodeClick}: PolymathMapProps) {
           "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
       },
     };
+
     newNodes.push(centerNode);
 
-    // Add domain nodes (first level)
-    const domainYOffset = 150;
-    const domainXSpacing = 250;
+    const convert = (data: any, parentKey: string, depth: number) => {
+      if (!data) return;
 
-    Object.entries(coursesData).forEach(
-      ([domainId, domainData]: [string, any], index) => {
-        const domainNode: Node = {
-          id: `domain-${domainId}`,
-          type: "default",
+      let obj = {};
+      if (depth === 0) {
+        obj = data.domains;
+      } else if (depth === 1) {
+        obj = data.branches;
+      }
+
+      Object.entries(obj).flatMap(([key, value], index) => {
+        const node: Node = {
+          id: key,
           data: {
-            label: domainData.title || domainId,
-            type: "domain",
-            description: domainData.description || "",
+            label: value.name,
+            description: "Your learning journey hub",
           },
           position: {
-            x: (index - 1) * domainXSpacing,
-            y: domainYOffset,
+            y: Math.floor(index) * 150,
+            x: depth * 350,
           },
+          sourcePosition: Position.Right,
+          targetPosition: Position.Left,
           style: {
-            background: "hsl(var(--primary))",
+            background: "white",
             color: "hsl(var(--primary-foreground))",
             border: "2px solid hsl(var(--primary))",
             borderRadius: "8px",
-            padding: "8px 12px",
-            fontWeight: 500,
-            boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+            fontWeight: 600,
+            boxShadow:
+              "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
           },
         };
-        newNodes.push(domainNode);
 
-        // Connect domain to center
-        newEdges.push({
-          id: `edge-center-${domainId}`,
-          source: "center",
-          target: `domain-${domainId}`,
-          type: "smoothstep",
-          style: {
-            stroke: "hsl(var(--primary))",
-            strokeWidth: 2,
-            backgroundColor: "hsl(var(--primary))",
-          },
-          markerEnd: {
-            type: MarkerType.ArrowClosed,
-            color: "hsl(var(--primary))",
-            width: 12,
-            height: 12,
-          },
-        });
+        const edge: Edge = {
+          id: `${depth}-${parentKey}-${key}`,
+          type: "default",
+          source: parentKey,
+          target: key,
+        };
 
-        // Add courses under each domain
-        const courseYOffset = domainYOffset + 100;
-        if (domainData.courses) {
-          Object.entries(domainData.courses).forEach(
-            ([courseId, course]: [string, any], courseIndex) => {
-              const courseNode: Node = {
-                id: `course-${domainId}-${courseId}`,
-                type: "default",
-                data: {
-                  label: course.title || courseId,
-                  type: "course",
-                  description: course.description || "",
-                },
-                position: {
-                  x: (index - 1) * domainXSpacing + courseIndex * 200 - 100,
-                  y: courseYOffset,
-                },
-                style: {
-                  background: "hsl(var(--primary))",
-                  color: "hsl(var(--primary-foreground))",
-                  border: "2px solid hsl(var(--primary))",
-                  borderRadius: "6px",
-                  padding: "6px 10px",
-                  boxShadow: "0 2px 4px -1px rgba(0, 0, 0, 0.1)",
-                },
-              };
-              newNodes.push(courseNode);
+        newNodes.push(node);
+        newEdges.push(edge);
 
-              // Connect course to domain
-              newEdges.push({
-                id: `edge-${domainId}-${courseId}`,
-                source: `domain-${domainId}`,
-                target: `course-${domainId}-${courseId}`,
-                type: "smoothstep",
-                style: {
-                  stroke: "hsl(var(--primary))",
-                  strokeWidth: 1.5,
-                  backgroundColor: "hsl(var(--primary))",
-                },
-                markerEnd: {
-                  type: MarkerType.ArrowClosed,
-                  color: "hsl(var(--primary))",
-                  width: 12,
-                  height: 12,
-                },
-              });
-            }
-          );
-        }
-      }
-    );
+        convert(value, key, depth + 1);
+      });
+    };
 
+    convert(coursesData, "center", 0);
     return {nodes: newNodes, edges: newEdges};
   }, []);
 
-  console.log(data, "--courses");
-
   // Initialize nodes and edges
   useMemo(() => {
-    const {nodes: initialNodes, edges: initialEdges} = processCourses(courses);
-    setNodes(initialNodes);
-    setEdges(initialEdges);
-  }, [courses, processCourses, setNodes, setEdges]);
+    if (data) {
+      const {nodes: initialNodes, edges: initialEdges} = processCourses(data);
+      setNodes(initialNodes);
+      setEdges(initialEdges);
+    }
+  }, [data, processCourses, setNodes, setEdges]);
 
   const onConnect = useCallback(
     (params: RFConnection) => setEdges((eds: Edge[]) => addEdge(params, eds)),
@@ -203,6 +145,8 @@ export function PolymathMap({courses, onNodeClick}: PolymathMapProps) {
       }
     }, 100);
   };
+
+  console.log(data);
 
   const nodeTypes = useMemo<Record<string, React.ComponentType<any>>>(
     () => ({}),
