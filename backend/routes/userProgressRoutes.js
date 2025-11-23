@@ -8,12 +8,9 @@ import {
 const router = express.Router();
 
 // Get user progress
-router.get("/:userId", getUserProgress);
+router.get("/", getUserProgress);
 
 // Update user progress
-router.post("/:userId/update", updateUserProgress);
-
-// Get user streak information
-router.get("/:userId/streak", getUserStreak);
+router.post("/update", updateUserProgress);
 
 export default router;

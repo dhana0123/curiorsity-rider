@@ -1,3 +1,4 @@
+import {useCourses} from "@/api/courses";
 import {useCallback, useRef, useMemo, useState} from "react";
 import ReactFlow, {
   addEdge,
@@ -39,6 +40,8 @@ type PolymathMapProps = {
 };
 
 export function PolymathMap({courses, onNodeClick}: PolymathMapProps) {
+  const {data, isLoading, error} = useCourses();
+
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const [nodes, setNodes, onNodesChange] = useNodesState<CourseNodeData>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -62,11 +65,10 @@ export function PolymathMap({courses, onNodeClick}: PolymathMapProps) {
       },
       position: {x: 0, y: 0},
       style: {
-        background: "hsl(var(--primary))",
+        background: "white",
         color: "hsl(var(--primary-foreground))",
         border: "2px solid hsl(var(--primary))",
         borderRadius: "8px",
-        padding: "10px 15px",
         fontWeight: 600,
         boxShadow:
           "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
@@ -178,6 +180,8 @@ export function PolymathMap({courses, onNodeClick}: PolymathMapProps) {
     return {nodes: newNodes, edges: newEdges};
   }, []);
 
+  console.log(data, "--courses");
+
   // Initialize nodes and edges
   useMemo(() => {
     const {nodes: initialNodes, edges: initialEdges} = processCourses(courses);
@@ -210,7 +214,7 @@ export function PolymathMap({courses, onNodeClick}: PolymathMapProps) {
   );
 
   return (
-    <div className="h-[500px] w-full rounded-lg border border-border bg-background/60">
+    <div className="h-[100vh] w-full bg-background/60">
       <div className="h-full w-full" ref={reactFlowWrapper}>
         <ReactFlow
           nodes={nodes}
@@ -222,7 +226,6 @@ export function PolymathMap({courses, onNodeClick}: PolymathMapProps) {
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
           fitView
-          defaultViewport={{x: 0, y: 0, zoom: 0.8}}
           nodesDraggable={true}
           nodesConnectable={false}
           zoomOnScroll={true}
@@ -236,7 +239,7 @@ export function PolymathMap({courses, onNodeClick}: PolymathMapProps) {
           <Background color="#aaa" gap={16} />
           <Controls
             position="top-right"
-            showInteractive={false}
+            showInteractive={true}
             style={{
               backgroundColor: "hsl(var(--card))",
               borderRadius: "6px",
@@ -246,7 +249,7 @@ export function PolymathMap({courses, onNodeClick}: PolymathMapProps) {
             }}
           />
           <Panel
-            position="top-center"
+            position="bottom-center"
             className="text-sm text-muted-foreground"
           >
             Drag to pan • Scroll to zoom • Click and drag nodes to rearrange

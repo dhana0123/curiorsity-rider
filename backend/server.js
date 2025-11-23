@@ -4,8 +4,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import {fileURLToPath} from "url";
 import {dirname} from "path";
-import {automobile_courses} from "./courses.js";
-import userProgressRoutes from "./routes/userProgressRoutes.js";
+import setRoutes from "./routes/index.js";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -26,24 +25,8 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
-// API Routes
-app.use("/api/progress", userProgressRoutes);
-
-// Courses routes
-app.get("/api/courses", (req, res) => {
-  res.json(automobile_courses);
-});
-
-app.get("/api/courses/:courseId", (req, res) => {
-  const courseId = req.params.courseId;
-  const course = automobile_courses[courseId];
-
-  if (!course) {
-    return res.status(404).json({error: "Course not found"});
-  }
-
-  res.json(course);
-});
+// routes
+setRoutes(app);
 
 // Serve static files from the React frontend app in production
 if (process.env.NODE_ENV === "production") {
