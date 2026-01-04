@@ -1,7 +1,3 @@
-// STREAK 1
-// Longest Streak: 2
-// 10 XP
-
 export const automobile_courses = {
   Automotive_Engines_and_Components: {
     name: "Automotive Engines & Components",
@@ -21,36 +17,89 @@ export const automobile_courses = {
       "Engine Maintenance & Troubleshooting",
     ],
   },
+
   Vehicle_Dynamics: {
     name: "Vehicle Dynamics",
-    topics: [""],
+    topics: [],
   },
+
   Kinematics_of_Machinery_Automotive_Focus: {
     name: "Kinematics of Machinery (Automotive Focus)",
-    topics: [""],
+    topics: [],
   },
+
   Internal_Combustion_Engines: {
     name: "Internal Combustion Engines",
-    topics: [""],
+    topics: [],
   },
+
   Automotive_Transmission_Systems: {
     name: "Automotive Transmission Systems",
-    topics: [""],
+    topics: [],
   },
-  Suspension_Steering_and_Braking_Systems:
-    "Suspension, Steering & Braking Systems",
-  Automotive_Electrical_and_Electronics: "Automotive Electrical & Electronics",
-  Fuel_Technology_and_Emission_Control: "Fuel Technology & Emission Control",
-  Automotive_Chassis_Design: "Automotive Chassis Design",
-  Automotive_Materials: "Automotive Materials",
-  Engine_Testing_and_Performance: "Engine Testing & Performance",
-  Advanced_Vehicle_Dynamics: "Advanced Vehicle Dynamics",
-  Hybrid_and_Electric_Vehicles: "Hybrid & Electric Vehicles",
-  Automotive_Safety_and_Crash_Engineering:
-    "Automotive Safety & Crash Engineering",
-  Vehicle_Design_and_Simulation: "Vehicle Design & Simulation",
-  Powertrain_Engineering: "Powertrain Engineering",
-  Automotive_Aerodynamics: "Automotive Aerodynamics",
-  Maintenance_and_Diagnostics_of_Vehicles:
-    "Maintenance & Diagnostics of Vehicles",
+
+  Suspension_Steering_and_Braking_Systems: {
+    name: "Suspension, Steering & Braking Systems",
+    topics: [],
+  },
+
+  Automotive_Electrical_and_Electronics: {
+    name: "Automotive Electrical & Electronics",
+    topics: [],
+  },
+
+  Fuel_Technology_and_Emission_Control: {
+    name: "Fuel Technology & Emission Control",
+    topics: [],
+  },
+
+  Automotive_Chassis_Design: {
+    name: "Automotive Chassis Design",
+    topics: [],
+  },
+
+  Automotive_Materials: {
+    name: "Automotive Materials",
+    topics: [],
+  },
+
+  Engine_Testing_and_Performance: {
+    name: "Engine Testing & Performance",
+    topics: [],
+  },
+
+  Advanced_Vehicle_Dynamics: {
+    name: "Advanced Vehicle Dynamics",
+    topics: [],
+  },
+
+  Hybrid_and_Electric_Vehicles: {
+    name: "Hybrid & Electric Vehicles",
+    topics: [],
+  },
+
+  Automotive_Safety_and_Crash_Engineering: {
+    name: "Automotive Safety & Crash Engineering",
+    topics: [],
+  },
+
+  Vehicle_Design_and_Simulation: {
+    name: "Vehicle Design & Simulation",
+    topics: [],
+  },
+
+  Powertrain_Engineering: {
+    name: "Powertrain Engineering",
+    topics: [],
+  },
+
+  Automotive_Aerodynamics: {
+    name: "Automotive Aerodynamics",
+    topics: [],
+  },
+
+  Maintenance_and_Diagnostics_of_Vehicles: {
+    name: "Maintenance & Diagnostics of Vehicles",
+    topics: [],
+  },
 };

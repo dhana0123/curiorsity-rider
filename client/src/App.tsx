@@ -1,18 +1,33 @@
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
 import Dashboard from "@/pages/Dashboard";
 import Main from "@/pages/Main";
+import Login from "@/pages/Login";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
+
+// Protected Route Component
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const token = localStorage.getItem("token");
+  return token ? <>{children}</> : <Navigate to="/login" replace />;
+};
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
         <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/" index element={<Main />} />
-          {/* Add more routes here as needed */}
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<Main />} />
+          </Route>
         </Routes>
       </Router>
     </QueryClientProvider>

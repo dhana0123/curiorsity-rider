@@ -16,6 +16,11 @@ const api = axios.create({
 // Add a request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
+    // Don't add token for login endpoint
+    if (config.url?.includes("/auth/login")) {
+      return config;
+    }
+    
     const token = localStorage.getItem("token");
     if (token) {
       config.headers = config.headers || {};
@@ -45,12 +50,10 @@ api.interceptors.response.use(
 );
 
 export const login = async (
-  username: string,
-  password: string
+  passcode: string
 ): Promise<{token: string}> => {
   const response = await api.post<{token: string}>("/auth/login", {
-    username,
-    password,
+    passcode,
   });
   localStorage.setItem("token", response.data.token);
   return response.data;
