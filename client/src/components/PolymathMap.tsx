@@ -305,6 +305,7 @@ export function PolymathMap() {
             sourcePosition: Position.Right,
             targetPosition: Position.Left,
             position: {x: xPosition, y: nodeY},
+          
           };
 
           const edge: Edge = {
@@ -313,6 +314,10 @@ export function PolymathMap() {
             source: parentId,
             target: childNodeId,
             markerEnd: {type: MarkerType.ArrowClosed},
+            style: {
+              stroke: "gray",
+              strokeWidth: 2,
+            },
           };
 
           newNodes.push(node);

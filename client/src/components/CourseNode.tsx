@@ -67,7 +67,7 @@ export function CourseNode({data, id}: CourseNodeProps) {
 
   return (
     <div
-      className="relative bg-white border-2 border-primary rounded-lg shadow-lg p-3 min-w-[200px]"
+      className="relative bg-white border-2 rounded-lg shadow-lg p-3 min-w-[200px]"
       style={{
         borderColor: isCenter
           ? "hsl(var(--primary))"
@@ -98,7 +98,7 @@ export function CourseNode({data, id}: CourseNodeProps) {
 
         {/* Label */}
         <div className="flex-1 text-center">
-          <div className="font-semibold text-sm text-primary-foreground">
+          <div className="font-semibold text-lg">
             {data.label}
           </div>
           {data.description && (
