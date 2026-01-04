@@ -2,6 +2,7 @@ import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom
 import Dashboard from "@/pages/Dashboard";
 import Main from "@/pages/Main";
 import Login from "@/pages/Login";
+import Admin from "@/pages/Admin";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,14 @@ function App() {
           >
             <Route index element={<Main />} />
           </Route>
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <Admin />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Router>
     </QueryClientProvider>
